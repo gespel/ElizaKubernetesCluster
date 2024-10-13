@@ -1,0 +1,19 @@
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seasy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seasy
+  template:
+    metadata:
+      labels:
+        app: seasy
+    spec:
+      containers:
+      - name: seasy
+        image: gespel/seasy:0.0.3

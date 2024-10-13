@@ -19,6 +19,16 @@ resource "helm_release" "prometheus_operator" {
   chart      = "kube-prometheus-stack"
 
   set {
+    name  = "grafana.grafana.ini.server.root_url"
+    value = "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+  }
+
+  set {
+    name  = "grafana.grafana.ini.server.serve_from_sub_path"
+    value = "true"
+  }
+
+  set {
     name  = "prometheusOperator.enabled"
     value = "true"
   }
@@ -37,6 +47,11 @@ resource "helm_release" "prometheus_operator" {
     name  = "kubePrometheusStack.prometheus.enabled"
     value = "true"
   }
+
+  set {
+    name  = "service.type"
+    value = "NodePort"
+  }
 }
 
 module "reverse_proxy" {
@@ -45,4 +60,8 @@ module "reverse_proxy" {
 
 module "dashboard" {
   source = "./dashboard"
+}
+
+module "seasy" {
+  source = "./applications"
 }
